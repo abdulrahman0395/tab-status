@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Status",
+  "version": "1.5",
+  "description": "حط حالة قصيرة في أول عنوان التاب (مستني إيه فيها) من غير ما تغيّر الاسم الأصلي.",
+  "permissions": ["storage", "scripting", "activeTab"],
+  "background": { "service_worker": "background.js" },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Tab Status",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": { "default": "Alt+Shift+S" },
+      "description": "افتح Tab Status"
+    }
+  }
+}
