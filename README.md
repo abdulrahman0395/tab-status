@@ -4,7 +4,7 @@ A lightweight Chromium extension that adds a short status label to the front of 
 
 Useful whenever you keep many tabs open at once: long-running jobs, pending replies, research in progress, or anything you need to come back to.
 
-Works in Brave, Chrome, Edge, and other Chromium-based browsers.
+See [Browser support](#browser-support) for where it runs.
 
 ## Features
 
@@ -13,29 +13,60 @@ Works in Brave, Chrome, Edge, and other Chromium-based browsers.
 - **Resilient to title changes.** If a single-page app rewrites its title, the label is reapplied automatically.
 - **Saved statuses.** Recently used statuses appear as one-click chips. Pin the ones you use often; unpinned entries expire on their own.
 - **Update notifications.** The extension checks this repository for new versions and shows a **↑** badge when one is available.
-- **Private by design.** All data is stored locally in your browser. Nothing is collected or sent anywhere.
+- **Private by design.** All data is stored locally on your device. Nothing is collected or sent anywhere.
 
 ## Installation
 
-Installing from a Git clone lets you update with a single click later.
+The extension is installed from source. Installing from a Git clone is recommended, because updates then take a single command.
 
-1. Install [Git for Windows](https://git-scm.com/download/win) if you don't have it.
-2. Clone the repository into a permanent folder:
+### 1. Get the files
+
+1. Install [Git](https://git-scm.com/downloads) if you don't already have it.
+2. Clone the repository into a folder you will keep (the browser loads the extension from this folder, so don't delete or move it):
    ```
    git clone https://github.com/abdulrahman0395/tab-status.git
    ```
-3. Open `brave://extensions` (or `chrome://extensions`) and enable **Developer mode**.
-4. Click **Load unpacked** and select the `tab-status` folder.
-5. Pin the extension from the toolbar's extensions menu for quick access.
 
-> **Without Git:** on this page, choose **Code → Download ZIP**, extract it to a permanent folder, and continue from step 3. Updates will then need to be applied manually.
+> **Without Git:** choose **Code → Download ZIP** on this page and extract it to a permanent folder. Updates will then need to be downloaded manually.
+
+### 2. Load it into your browser
+
+1. Open your browser's extensions page (see the table below).
+2. Turn on **Developer mode**.
+3. Click **Load unpacked** and select the `tab-status` folder.
+4. Optionally, pin the extension to the toolbar from the extensions menu.
+
+| Browser | Extensions page |
+|---|---|
+| Google Chrome | `chrome://extensions` |
+| Brave | `brave://extensions` |
+| Opera / Opera GX | `opera://extensions` |
+| Microsoft Edge | `edge://extensions` |
+
+The steps are the same in all of them; only the address differs. Any other browser built on Chromium works the same way.
+
+## Browser support
+
+| Browser | Status |
+|---|---|
+| Chrome, Brave, Opera, Edge, and other Chromium-based browsers | ✅ Supported |
+| Firefox | ❌ Not yet supported |
+| Safari | ❌ Not yet supported |
+
+**Firefox** loads unpacked extensions only temporarily (they are removed when the browser restarts) and does not run this extension's background script in its current form. Permanent installation also requires the extension to be signed by Mozilla.
+
+**Safari** requires the extension to be converted into a macOS app with Xcode and signed before it can be installed.
+
+Support for both is planned. Contributions are welcome.
 
 ## Updating
 
 When a new version is available, a **↑** badge appears on the extension icon and the popup shows an update banner.
 
-1. Run `update.bat` in the extension folder.
-2. Click the update button in the popup's banner, or reload the extension from `brave://extensions`.
+1. Pull the latest version into the extension folder:
+   - **Windows:** double-click `update.bat`.
+   - **macOS / Linux:** run `git pull` in the folder.
+2. Click the update button in the popup's banner, or press the reload button on the extension in your browser's extensions page.
 
 Your statuses and saved list are preserved across updates.
 
@@ -72,5 +103,5 @@ The only network request the extension makes is reading `manifest.json` from thi
 
 ## Limitations
 
-- Browser-internal pages (`brave://`, `chrome://`) and extension stores do not allow labels.
+- Browser-internal pages (settings, the extensions page, new-tab pages) and extension stores do not allow labels.
 - Statuses are stored per extension installation. Loading the extension from a different folder starts with an empty list.
