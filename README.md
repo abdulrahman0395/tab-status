@@ -1,12 +1,14 @@
 # Tab Status
 
-A lightweight Chromium extension that adds a short status label to the front of a tab's title — "Waiting on agents", "FP check", "Ready for review" — so you can see what each tab is waiting on at a glance, without losing the page's original title.
+A lightweight Chromium extension that adds a short status label to the front of a tab's title — "Waiting for reply", "Build running", "Read later" — so you can tell what each tab is for at a glance, without losing the page's original title.
+
+Useful whenever you keep many tabs open at once: long-running jobs, pending replies, research in progress, or anything you need to come back to.
 
 Works in Brave, Chrome, Edge, and other Chromium-based browsers.
 
 ## Features
 
-- **Per-tab status labels.** The label is shown before the page's own title, e.g. `Waiting on agents | Cap enforcement actions per namespace`.
+- **Per-tab status labels.** The label is shown before the page's own title, e.g. `Waiting for reply | Project kickoff – Inbox`.
 - **Survives restarts.** Statuses are saved per page and restored when the browser reopens or the page is opened again.
 - **Resilient to title changes.** If a single-page app rewrites its title, the label is reapplied automatically.
 - **Saved statuses.** Recently used statuses appear as one-click chips. Pin the ones you use often; unpinned entries expire on their own.
@@ -56,7 +58,7 @@ Your statuses and saved list are preserved across updates.
 - **Statuses on open pages:** never removed while in use.
 - **Page statuses:** forgotten after 30 days without changes.
 
-Query strings and fragments are ignored when matching pages, so `/challenges/abc?run=1` and `/challenges/abc?run=2` share the same status.
+Query strings and fragments are ignored when matching pages, so `example.com/orders/42?tab=details` and `example.com/orders/42?tab=history` share the same status.
 
 ## Permissions
 
