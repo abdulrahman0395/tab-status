@@ -43,6 +43,7 @@
     alive = false;
     observer.disconnect();
     document.removeEventListener("tab-status-takeover", onTakeover);
+    document.removeEventListener("tab-status:set", onAuto);
   }
 
   const observer = new MutationObserver(() => {
@@ -60,6 +61,26 @@
   }
   document.addEventListener("tab-status-takeover", onTakeover);
   document.dispatchEvent(new CustomEvent("tab-status-takeover", { detail: INSTANCE }));
+
+  // حالة تلقائية: أي سكريبت في الصفحة (userscript مثلًا) يقدر يبعت
+  //   document.dispatchEvent(new CustomEvent("tab-status:set", { detail: "النص" }))
+  // و detail فاضي = امسح الحالة. بتشتغل بس لو "الحالة التلقائية" مفعّلة من الـ popup.
+  // الـ detail لازم يبقى نص، لأن الأوبجكتس مبتعديش من الصفحة لسكريبت الإكستنشن.
+  let lastAuto;
+  function onAuto(e) {
+    if (!alive || !contextOk()) return;
+    const s = typeof e.detail === "string" ? e.detail.trim().slice(0, 40) : "";
+    if (s === lastAuto) return; // السكريبت ممكن يبعت نفس الحالة كل شوية
+    chrome.runtime.sendMessage({ type: "autoStatus", url: location.href, status: s || null }, (res) => {
+      if (chrome.runtime.lastError || !res || !res.applied) return;
+      lastAuto = s;
+      base = clean(document.title);
+      status = res.status || null;
+      writes = [];
+      apply();
+    });
+  }
+  document.addEventListener("tab-status:set", onAuto);
 
   chrome.runtime.onMessage.addListener((msg) => {
     if (!alive || !msg || msg.type !== "setStatus") return;

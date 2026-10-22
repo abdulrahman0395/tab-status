@@ -182,6 +182,14 @@ $("custom").addEventListener("keydown", (e) => {
 });
 $("clear").onclick = () => setStatus(null);
 
+// الحالة التلقائية مقفولة افتراضيًا
+chrome.storage.local.get("autoStatus").then(({ autoStatus }) => { $("auto").checked = !!autoStatus; });
+$("auto").onchange = async (e) => {
+  await chrome.storage.local.set({ autoStatus: e.target.checked });
+  flash(e.target.checked ? "الحالة التلقائية اشتغلت" : "الحالة التلقائية اتقفلت");
+  resetInput();
+};
+
 init();
 
 // لو فيه نسخة أحدث على GitHub نعرض الخطوتين

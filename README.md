@@ -12,6 +12,7 @@ See [Browser support](#browser-support) for where it runs.
 - **Survives restarts.** Statuses are saved per page and restored when the browser reopens or the page is opened again.
 - **Resilient to title changes.** If a single-page app rewrites its title, the label is reapplied automatically.
 - **Saved statuses.** Recently used statuses appear as one-click chips. Pin the ones you use often; unpinned entries expire on their own.
+- **Automatic statuses (optional).** Scripts running on a page, such as userscripts, can set the tab's status for you when something starts or finishes. Off by default.
 - **Update notifications.** The extension checks this repository for new versions and shows a **↑** badge when one is available.
 - **Private by design.** All data is stored locally on your device. Nothing is collected or sent anywhere.
 
@@ -81,6 +82,21 @@ Your statuses and saved list are preserved across updates.
 | Apply a saved status | Click its chip |
 | Pin a saved status | Click 📌 on its chip |
 | Clear the tab's status | Empty the field and press **Enter**, or use the clear button |
+
+### Automatic statuses
+
+Turn on **automatic statuses** at the bottom of the popup to let scripts on a page (for example, a userscript) set that tab's status. It is off by default, and while it is off these requests are ignored.
+
+A script sets the status by dispatching a DOM event whose `detail` is the label text:
+
+```js
+document.dispatchEvent(new CustomEvent("tab-status:set", { detail: "Build running" }));
+```
+
+- `detail` must be a string (at most 40 characters are used). Objects do not reach the extension.
+- Sending the same label repeatedly is harmless; only changes are applied.
+- An empty string clears the status, but only if the current status was set by a script. A status you typed yourself is left alone.
+- A new label from a script replaces whatever status the tab had, including one you typed.
 
 ### Retention
 

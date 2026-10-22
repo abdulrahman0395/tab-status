@@ -42,6 +42,25 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     return true;
   }
 
+  // حالة جاية من سكريبت في الصفحة: بتتحط بس لو المستخدم مفعّل الحالة التلقائية
+  if (msg.type === "autoStatus" && sender.tab) {
+    const tk = "tab_" + sender.tab.id, ak = "auto_" + sender.tab.id;
+    chrome.storage.local.get(["autoStatus", tk, ak]).then(async (o) => {
+      if (!o.autoStatus) return sendResponse({ applied: false });
+      const s = msg.status || null;
+      if (s) {
+        await chrome.storage.local.set({ [tk]: s, [ak]: s });
+      } else {
+        // المسح بيشيل بس الحالة اللي السكريبت نفسه حاطها، مش حالة إنت كاتبها بإيدك
+        if (!o[tk] || o[tk] !== o[ak]) return sendResponse({ applied: true, status: o[tk] || null });
+        await chrome.storage.local.remove([tk, ak]);
+      }
+      await remember(msg.url || sender.tab.url, s);
+      sendResponse({ applied: true, status: s });
+    });
+    return true;
+  }
+
   // الـ popup بيبلّغ إن الحالة اتغيرت
   if (msg.type === "remember") {
     remember(msg.url, msg.status).then(() => sendResponse({ ok: true }));
@@ -51,7 +70,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 // التاب اتقفلت: حالتها المؤقتة تتمسح، بس اللي متحفوظ على الصفحة بيفضل
 chrome.tabs.onRemoved.addListener((tabId) => {
-  chrome.storage.local.remove("tab_" + tabId);
+  chrome.storage.local.remove(["tab_" + tabId, "auto_" + tabId]);
 });
 
 // بعد ريستارت المتصفح الـ ids بتتغير: نمسح القديم، ونتخلص من حالات الصفحات القديمة جدًا
@@ -59,7 +78,7 @@ chrome.runtime.onStartup.addListener(async () => {
   const all = await chrome.storage.local.get(null);
   const cutoff = Date.now() - URL_MAX_AGE_DAYS * 864e5;
   const keys = Object.keys(all).filter((k) =>
-    k.startsWith("tab_") || (k.startsWith("url_") && !(all[k] && all[k].at >= cutoff)));
+    k.startsWith("tab_") || k.startsWith("auto_") || (k.startsWith("url_") && !(all[k] && all[k].at >= cutoff)));
   if (keys.length) await chrome.storage.local.remove(keys);
 });
 

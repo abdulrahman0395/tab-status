@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tab Status",
-  "version": "1.5",
+  "version": "1.6",
   "description": "حط حالة قصيرة في أول عنوان التاب (مستني إيه فيها) من غير ما تغيّر الاسم الأصلي.",
   "permissions": ["storage", "scripting", "activeTab"],
   "background": { "service_worker": "background.js" },

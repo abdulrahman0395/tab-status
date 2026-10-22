@@ -42,6 +42,13 @@
   .upd-s code { color:var(--text); background:var(--card); padding:0 4px; border-radius:4px; }
   .upd-row { display:flex; align-items:center; gap:10px; }
   .upd-row a { color:var(--muted); font-size:12px; }
+  .auto { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:12px; color:var(--muted); cursor:pointer; }
+  .auto input { appearance:none; flex:none; width:30px; height:17px; padding:0; border-radius:999px;
+                background:var(--card); border:1px solid var(--line); position:relative; cursor:pointer; transition:background .15s; }
+  .auto input::after { content:""; position:absolute; top:2px; inset-inline-start:2px; width:11px; height:11px;
+                       border-radius:50%; background:var(--muted); transition:inset-inline-start .15s, background .15s; }
+  .auto input:checked { background:var(--accent); border-color:var(--accent); }
+  .auto input:checked::after { inset-inline-start:15px; background:#fff; }
   .err { color:#ff8b8e; font-size:12px; margin-top:8px; display:none; }
 </style>
 </head>
@@ -61,6 +68,8 @@
   <div class="hint"><span>＋ تضيفها للقائمة بس (<bdi>Ctrl+Enter</bdi>)</span><span id="flash"></span></div>
   <div id="lists"></div>
   <button class="clear" id="clear">امسح حالة التاب دي</button>
+  <label class="auto" title="سكريبت في الصفحة (زي userscript) يقدر يحط الحالة لوحده لما حاجة تبدأ أو تخلص">
+    <input type="checkbox" id="auto"> حالة تلقائية من سكريبتات الصفحة</label>
   <div class="err" id="err">مش هينفع في الصفحة دي (صفحات المتصفح الداخلية ومتجر الإكستنشنز ممنوعة).</div>
   <script src="popup.js"></script>
 </body>
